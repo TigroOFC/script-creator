@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loadstring - Script Creator</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at center, #0b0033, #000000);
+      background-image:
+        url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #a06aff;
+      font-weight: 700;
+    }
+    input[type="text"] {
+      width: 350px;
+      max-width: 90vw;
+      padding: 12px 15px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px #8a2be2;
+      background-color: rgba(0,0,0,0.6);
+      color: white;
+      font-family: monospace;
+    }
+    button {
+      background-color: #8a2be2cc;
+      border: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 8px #8a2be2;
+      transition: background-color 0.3s ease;
+      margin: 10px 10px 20px 10px;
+    }
+    button:hover {
+      background-color: #a356f4cc;
+      box-shadow: 0 0 15px #a356f4;
+    }
+    #resultado {
+      max-width: 90vw;
+      width: 700px;
+      background-color: rgba(0,0,0,0.6);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #8a2be2;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      color: #c0c0c0;
+      min-height: 100px;
+      overflow-x: auto;
+      user-select: all;
+      text-align: center;
+    }
+    .botoes {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+      max-width: 700px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Loadstring - Script Creator</h1>
+
+  <input type="text" id="urlInput" placeholder="Cole a URL do Raw, ex: http://127.0.0.1:5500/raw.html?id=6897..." />
+
+  <button onclick="mostrarLoadstring()">Gerar loadstring()</button>
+
+  <div id="resultado">A linha loadstring aparecerá aqui.</div>
+
+  <div class="botoes">
+    <button onclick="voltar()">Voltar</button>
+    <button onclick="copiarTexto()">Copiar</button>
+  </div>
+
+  <script>
+    const resultado = document.getElementById("resultado");
+    const urlInput = document.getElementById("urlInput");
+
+    function mostrarLoadstring() {
+      const url = urlInput.value.trim();
+
+      if (!url) {
+        resultado.textContent = "Por favor, cole a URL completa.";
+        return;
+      }
+
+      try {
+        new URL(url);
+      } catch {
+        resultado.textContent = "URL inválida.";
+        return;
+      }
+
+      const luaLine = `loadstring(game:HttpGet("${url}"))()`;
+      resultado.textContent = luaLine;
+    }
+
+    function voltar() {
+      // Vai para a página anterior ou para "index.html" por segurança
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    function copiarTexto() {
+      const texto = resultado.textContent;
+      if (!texto || texto === "A linha loadstring aparecerá aqui." || texto === "Por favor, cole a URL completa." || texto === "URL inválida.") {
+        alert("Nada para copiar.");
+        return;
+      }
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Texto copiado para a área de transferência!");
+      }).catch(() => {
+        alert("Erro ao copiar texto.");
+      });
+    }
+  </script>
+</body>
+</html>
